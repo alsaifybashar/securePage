@@ -1,0 +1,140 @@
+:root {
+  /* Smooth Dark Blue Palette */
+  --bg-dark: #0f172a;
+  /* Slate 900 */
+  --bg-darker: #020617;
+  /* Slate 950 */
+
+  /* Rich gradients for depth - fade from deep blue to slightly lighter blue */
+  --bg-gradient: radial-gradient(circle at 15% 50%, rgba(30, 41, 59, 0.4), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.05), transparent 40%);
+
+  /* Glassmorphism tuned for blue */
+  --card-surface: rgba(30, 41, 59, 0.4);
+  /* Slate 800 with opacity */
+  --card-border: rgba(148, 163, 184, 0.1);
+  /* Slate 400 with low opacity */
+  --glass-stroke: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --text-main: #f8fafc;
+  /* Slate 50 */
+  --text-secondary: #94a3b8;
+  /* Slate 400 */
+  --text-muted: #64748b;
+  /* Slate 500 */
+
+  /* Accents - shifting to Electric Blue/Cyan to match the Dark Blue theme */
+  --accent-primary: #38bdf8;
+  /* Sky 400 */
+  --accent-glow: rgba(56, 189, 248, 0.3);
+  --accent-cyan: #06b6d4;
+  /* Cyan 500 */
+  --accent-green: #10b981;
+  /* Emerald 500 - kept for "Success/Secure" indicators */
+
+  --gradient-main: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-cyan) 100%);
+
+  /* Typography */
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Oswald', sans-serif;
+
+  /* Spacing & Layout */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-darker);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  transition: background-color 0.5s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+}
+
+p {
+  color: var(--text-secondary);
+  font-weight: 300;
+  font-size: 1.05rem;
+}
+
+/* Utilities */
+.text-gradient {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-panel {
+  background: var(--card-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  /* Slate 800 */
+  border-radius: 5px;
+  border: 2px solid var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
