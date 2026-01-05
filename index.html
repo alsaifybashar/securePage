@@ -5,7 +5,62 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SecurePent</title>
+
+  <!-- Security Meta Tags -->
+  <!-- CSP: Restricts resources to trusted sources. Note: 'unsafe-inline'/'unsafe-eval' allowed for Vite Dev; remove for Production -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+  <!-- X-Content-Type-Options: Prevents MIME-sniffing -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- Referrer-Policy: Protects user privacy and prevents leakage of sensitive URL parameters -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>SecurePent | Advanced Cybersecurity & Penetration Testing</title>
+  <meta name="description"
+    content="SecurePent provides elite penetration testing, automated security auditing, and persistent threat simulation for high-risk enterprises. Secure your future by design." />
+  <meta name="keywords"
+    content="Penetration Testing, Cybersecurity, Red Teaming, Vulnerability Assessment, Network Security, Web Application Security, SecurePent" />
+  <meta name="author" content="SecurePent Team" />
+  <link rel="canonical" href="https://securepent.com/" />
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://securepent.com/" />
+  <meta property="og:title" content="SecurePent | Elite Cybersecurity Solutions" />
+  <meta property="og:description"
+    content="Advanced penetration testing and security infrastructure for the modern threat landscape." />
+  <meta property="og:image" content="https://securepent.com/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://securepent.com/" />
+  <meta property="twitter:title" content="SecurePent | Elite Cybersecurity Solutions" />
+  <meta property="twitter:description"
+    content="Advanced penetration testing and security infrastructure for the modern threat landscape." />
+  <meta property="twitter:image" content="https://securepent.com/og-image.jpg" />
+
+  <!-- GEO / AI Optimization (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SecurePent",
+      "url": "https://securepent.com",
+      "logo": "https://securepent.com/logo.png",
+      "description": "SecurePent specializes in advanced penetration testing, vulnerability assessments, and automated security auditing for enterprises.",
+      "sameAs": [
+        "https://www.linkedin.com/company/securepent",
+        "https://twitter.com/securepent"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-555-0123-456",
+        "contactType": "Sales",
+        "areaServed": "Global",
+        "availableLanguage": "English"
+      },
+      "knowsAbout": ["Penetration Testing", "Cybersecurity", "Network Security", "Application Security", "Red Teaming"]
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@500;700&display=swap"
