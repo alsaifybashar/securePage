@@ -23,7 +23,7 @@ const CompanySection = () => {
                     Attackers are getting faster. Automation and AI let them scan, adapt and exploit at a pace no human team can match.
                 </p>
                 <p>
-                    <strong style={{ color: '#fff' }}>SecurePent</strong> changes the equation. We augment human pentesters with AI instead of replacing them – giving them continuous context. The same experts, in the same time, can cover more ground and find deeper issues.
+                    <strong style={{ color: 'var(--text-main)' }}>SecurePent</strong> changes the equation. We augment human pentesters with AI instead of replacing them – giving them continuous context. The same experts, in the same time, can cover more ground and find deeper issues.
                 </p>
                 <p>
                     CISOs often drown in scanners and reports. We provide a clear, live picture of where you are exposed. Pentesters remain the sharp edge of security.

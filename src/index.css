@@ -1,38 +1,19 @@
 :root {
-  /* Smooth Dark Blue Palette */
+  /* Dark Theme (Default) */
   --bg-dark: #0f172a;
-  /* Slate 900 */
   --bg-darker: #020617;
-  /* Slate 950 */
-
-  /* Rich gradients for depth - fade from deep blue to slightly lighter blue */
   --bg-gradient: radial-gradient(circle at 15% 50%, rgba(30, 41, 59, 0.4), transparent 40%),
     radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.05), transparent 40%);
-
-  /* Glassmorphism tuned for blue */
   --card-surface: rgba(30, 41, 59, 0.4);
-  /* Slate 800 with opacity */
   --card-border: rgba(148, 163, 184, 0.1);
-  /* Slate 400 with low opacity */
   --glass-stroke: rgba(255, 255, 255, 0.08);
-
-  /* Typography */
   --text-main: #f8fafc;
-  /* Slate 50 */
   --text-secondary: #94a3b8;
-  /* Slate 400 */
   --text-muted: #64748b;
-  /* Slate 500 */
-
-  /* Accents - shifting to Electric Blue/Cyan to match the Dark Blue theme */
   --accent-primary: #38bdf8;
-  /* Sky 400 */
   --accent-glow: rgba(56, 189, 248, 0.3);
   --accent-cyan: #06b6d4;
-  /* Cyan 500 */
   --accent-green: #10b981;
-  /* Emerald 500 - kept for "Success/Secure" indicators */
-
   --gradient-main: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-cyan) 100%);
 
   /* Typography */
@@ -43,6 +24,25 @@
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-dark: #f8fafc;
+  --bg-darker: #ffffff;
+  --bg-gradient: radial-gradient(circle at 15% 50%, rgba(241, 245, 249, 0.8), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 40%);
+  --card-surface: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(148, 163, 184, 0.2);
+  --glass-stroke: rgba(0, 0, 0, 0.08);
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent-primary: #0284c7;
+  --accent-glow: rgba(2, 132, 199, 0.2);
+  --accent-cyan: #0891b2;
+  --accent-green: #059669;
+  --gradient-main: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-cyan) 100%);
 }
 
 * {

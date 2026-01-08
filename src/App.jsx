@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import Section from './components/Section';
@@ -7,8 +7,13 @@ import ProductSection from './components/ProductSection';
 import MindsSection from './components/MindsSection';
 import InvestorsSection from './components/InvestorsSection';
 import ContactSection from './components/ContactSection';
+import CookieButton from './components/CookieButton';
+import CookieModal from './components/CookieModal';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
+  const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
+
   return (
     <Layout>
       <Hero />
@@ -29,6 +34,15 @@ function App() {
       </Section>
       {/* Spacer for scrolling */}
       <div style={{ height: '20vh' }}></div>
+
+      {/* Fixed UI Controls */}
+      <CookieButton onClick={() => setIsCookieModalOpen(true)} />
+      <ThemeToggle />
+
+      <CookieModal
+        isOpen={isCookieModalOpen}
+        onClose={() => setIsCookieModalOpen(false)}
+      />
     </Layout>
   )
 }

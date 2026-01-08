@@ -50,7 +50,7 @@ const Footer = () => {
                 }
                 .footer-bottom {
                     text-align: center;
-                    border-top: 1px solid rgba(255,255,255,0.05);
+                    border-top: 1px solid var(--glass-stroke);
                     padding-top: 2rem;
                     font-size: 0.9rem;
                     color: var(--text-muted);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sanitizeInput, validateInput } from '../utils/security';
+import { submitLead } from '../services/api';
 
 const ContactSection = () => {
     const [focused, setFocused] = useState(null);
@@ -60,20 +61,20 @@ const ContactSection = () => {
         }
 
         try {
-            // Sanitization before "sending"
+            // Sanitization before sending
             const cleanData = {
                 name: sanitizeInput(formData.name),
                 email: sanitizeInput(formData.email),
                 message: sanitizeInput(formData.message)
             };
 
-            // Mimic secure API transmission delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Submit to backend API
+            await submitLead(cleanData);
 
-            console.log('Secure Transmission:', cleanData); // In production, this goes to backend
             setSubmitStatus('success');
             setFormData({ name: '', email: '', message: '' });
         } catch (err) {
+            console.error('Lead submission error:', err);
             setSubmitStatus('error');
         } finally {
             setIsSubmitting(false);
@@ -195,25 +196,28 @@ const ContactSection = () => {
                 }
                 
                 input, textarea {
-                    background: rgba(0,0,0,0.2);
+                    background: var(--card-surface);
                     border: 1px solid var(--card-border);
                     border-radius: var(--radius-sm);
                     padding: 1rem;
-                    color: #fff;
+                    color: var(--text-main);
                     font-family: var(--font-main);
                     transition: all 0.3s ease;
+                }
+                input::placeholder, textarea::placeholder {
+                    color: var(--text-muted);
                 }
                 input:focus, textarea:focus {
                     outline: none;
                     border-color: var(--accent-primary);
-                    background: rgba(16, 185, 129, 0.05);
-                    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+                    background: var(--card-surface);
+                    box-shadow: 0 0 0 4px var(--accent-glow);
                 }
                 
                 .submit-btn {
                     margin-top: 1rem;
                     background: var(--text-main);
-                    color: #000;
+                    color: var(--bg-darker);
                     border: none;
                     padding: 1.2rem;
                     font-weight: 700;

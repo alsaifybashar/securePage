@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LoginModal from './LoginModal';
 
 const Navigation = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -35,12 +34,10 @@ const Navigation = () => {
         { label: 'Contact', id: 'contact' },
     ];
 
-    const [showLogin, setShowLogin] = useState(false);
+
 
     return (
         <nav className={`navigation ${scrolled ? 'scrolled glass-panel' : ''}`}>
-            {/* Modal Portal */}
-            <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
 
             <div className="nav-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 SECURE<span className="text-gradient">PENT</span>
@@ -56,12 +53,6 @@ const Navigation = () => {
             </ul>
 
             <div className="nav-actions">
-                <button className="btn-login" onClick={() => setShowLogin(true)}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 15V17M6 21H18C19.1046 21 20 20.1046 20 19V13C20 11.8954 19.1046 11 18 11H6C4.89543 11 4 11.8954 4 13V19C4 20.1046 4.89543 21 6 21ZM16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11H16Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span>Client Portal</span>
-                </button>
                 <button className="btn-nav-cta" onClick={() => scrollToSection('contact')}>Contact us</button>
             </div>
 
@@ -78,11 +69,11 @@ const Navigation = () => {
             align-items: center;
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(3, 3, 4, 0); /* Transparent start */
+            background: transparent;
         }
         .navigation.scrolled {
             height: 70px;
-            background: rgba(3, 3, 4, 0.85); /* Dark semi-transparent */
+            background: var(--card-surface);
             border-bottom: 1px solid var(--card-border);
         }
         .nav-brand {
@@ -91,7 +82,7 @@ const Navigation = () => {
             font-weight: 700;
             cursor: pointer;
             letter-spacing: 2px;
-            color: #fff;
+            color: var(--text-main);
         }
         
         .nav-links {
@@ -111,7 +102,7 @@ const Navigation = () => {
             position: relative;
         }
         .nav-links button:not(.btn-nav-cta):hover {
-            color: #fff;
+            color: var(--text-main);
         }
         /* Underline animation */
         .nav-links button:not(.btn-nav-cta)::after {
@@ -134,36 +125,19 @@ const Navigation = () => {
             gap: 1.5rem;
         }
 
-        .btn-login {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        .btn-login:hover {
-            opacity: 1;
-            color: var(--accent-primary);
-        }
 
         .btn-nav-cta {
-            background: rgba(255,255,255,0.1) !important;
+            background: var(--card-surface) !important;
             padding: 0.6rem 1.2rem;
             border-radius: var(--radius-sm);
-            color: #fff !important;
+            color: var(--text-main) !important;
             border: 1px solid var(--glass-stroke) !important;
             cursor: pointer;
         }
         .btn-nav-cta:hover {
             background: var(--accent-primary) !important;
             border-color: var(--accent-primary) !important;
-            color: #000 !important;
+            color: var(--bg-darker) !important;
             box-shadow: 0 0 15px var(--accent-glow);
         }
       `}</style>

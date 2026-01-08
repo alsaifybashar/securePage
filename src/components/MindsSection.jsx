@@ -72,7 +72,7 @@ const MindsSection = () => {
                     border-radius: var(--radius-sm);
                     overflow: hidden;
                     position: relative;
-                    background: #111;
+                    background: var(--bg-dark);
                     /* Interactive filter effect */
                     filter: grayscale(100%);
                     transition: all 0.5s ease;
@@ -80,19 +80,19 @@ const MindsSection = () => {
                 .mind-card:hover {
                     filter: grayscale(0%);
                     transform: translateY(-10px);
-                    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+                    box-shadow: 0 20px 40px -10px var(--accent-glow);
                 }
                 
                 .card-image {
                     width: 100%;
                     height: 100%;
-                    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop'); 
+                    background: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop'); 
                     background-size: cover;
                     background-position: center;
                 }
                 /* Use CSS nth-child to vary images if possible, or just keep generic for now */
-                .mind-card:nth-child(2) .card-image { background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop'); }
-                .mind-card:nth-child(3) .card-image { background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=600&auto=format&fit=crop'); }
+                .mind-card:nth-child(2) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop'); }
+                .mind-card:nth-child(3) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=600&auto=format&fit=crop'); }
 
                 .card-info {
                     position: absolute;

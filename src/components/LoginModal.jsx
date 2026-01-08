@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { validateInput, sanitizeInput } from '../utils/security';
+import { validateInput } from '../utils/security';
+import { login } from '../services/api';
 
 const LoginModal = ({ isOpen, onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [attempts, setAttempts] = useState(0);
     const [lockedUntil, setLockedUntil] = useState(null);
 
     // Clear state when modal opens/closes
@@ -38,32 +38,32 @@ const LoginModal = ({ isOpen, onClose }) => {
             return;
         }
 
-        // 3. Simulate Network Request
+        // 3. Make API Request
         setIsLoading(true);
 
-        // Simulating heavy hashing work factor
-        setTimeout(() => {
-            const sanitizedEmail = sanitizeInput(email);
+        try {
+            const response = await login(email, password);
 
-            // Demo Logic
-            if (sanitizedEmail === 'demo@securepent.com' && password === 'secure123') {
-                alert("Access Granted. Redirecting to Client Dashboard...");
-                // In a real app, you would set a secure HttpOnly cookie here
-                onClose();
-                setAttempts(0);
+            // Success
+            alert(`Access Granted. Welcome, ${response.user.name}!`);
+            onClose();
+
+        } catch (err) {
+            console.error('Login error:', err);
+
+            // Handle account lockout from server
+            if (err.status === 423) {
+                const retryAfter = err.data?.retryAfter || 30;
+                setLockedUntil(new Date(Date.now() + retryAfter * 1000));
+                setError(err.message || `Account locked for ${retryAfter} seconds.`);
+            } else if (err.status === 401) {
+                setError(err.message || "Credentials Invalid. Attempt logged.");
             } else {
-                setAttempts(prev => prev + 1);
-
-                // Brute Force Lockout Logic
-                if (attempts + 1 >= 3) {
-                    setLockedUntil(new Date(Date.now() + 30000)); // 30s lock
-                    setError("Security Alert: Multiple failed auth attempts. Account locked for 30s.");
-                } else {
-                    setError("Credentials Invalid. Attempt logged.");
-                }
+                setError("Authentication failed. Please try again.");
             }
+        } finally {
             setIsLoading(false);
-        }, 1500);
+        }
     };
 
     if (!isOpen) return null;

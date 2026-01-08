@@ -1,0 +1,61 @@
+.cookie-settings-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--card-surface);
+    border: 1px solid var(--glass-stroke);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+}
+
+.cookie-settings-button.fade-in {
+    animation: fadeInButton 0.8s ease-out forwards;
+}
+
+@keyframes fadeInButton {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cookie-settings-button:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-settings-button svg {
+    opacity: 0.8;
+}
+
+.cookie-settings-button:hover svg {
+    opacity: 1;
+}
+
+@media (max-width: 600px) {
+    .cookie-settings-button span {
+        display: none;
+    }
+
+    .cookie-settings-button {
+        padding: 0.75rem;
+    }
+}

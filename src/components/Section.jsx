@@ -13,7 +13,7 @@ const Section = ({ id, children, className = '' }) => {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
+                border-bottom: 1px solid var(--glass-stroke);
             }
         `}</style>
         </section>
