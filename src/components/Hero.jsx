@@ -20,9 +20,19 @@ const Hero = () => {
                     The future of offensive security is here.
                 </p>
                 <div className="cta-group">
-                    <button className="btn btn-primary">Request Details</button>
-                    <button className="btn btn-ghost">Meet The Team</button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        Request Details
+                    </button>
                 </div>
+            </div>
+
+            <div className="scroll-indicator" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+                </svg>
             </div>
 
             <style>{`
@@ -107,6 +117,7 @@ const Hero = () => {
                 display: flex;
                 gap: 1.5rem;
                 margin-top: 1rem;
+                justify-content: center;
             }
             
             .btn {
@@ -152,6 +163,28 @@ const Hero = () => {
             @keyframes pulseGlow {
                 0% { opacity: 0.4; transform: scale(1); }
                 100% { opacity: 0.6; transform: scale(1.05); }
+            }
+            
+            .scroll-indicator {
+                position: absolute;
+                bottom: 3rem;
+                left: 50%;
+                transform: translateX(-50%);
+                color: var(--text-muted);
+                cursor: pointer;
+                animation: bounce 2s infinite;
+                z-index: 10;
+                opacity: 0.7;
+                transition: all 0.3s;
+            }
+            .scroll-indicator:hover {
+                color: var(--accent-primary);
+                opacity: 1;
+            }
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+                40% { transform: translate(-50%, -10px); }
+                60% { transform: translate(-50%, -5px); }
             }
         `}</style>
         </section>

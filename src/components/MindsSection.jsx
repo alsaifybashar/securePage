@@ -2,9 +2,9 @@ import React from 'react';
 
 const MindsSection = () => {
     const team = [
-        { role: 'Chief Scientist', name: 'Dr. A. Vance' },
-        { role: 'Lead Exploiter', name: 'M. Chen' },
-        { role: 'AI Architect', name: 'S. Kova' }
+        { role: 'CEO & Pentester', name: 'Bashar .A' },
+        { role: 'IT-Security', name: 'Emil .V' },
+        { role: 'IT-Security', name: 'Johan .L' }
     ];
 
     return (
@@ -16,7 +16,7 @@ const MindsSection = () => {
                     We are a gathering of machine learning experts and ethical hacking specialists from top-tier tech giants.
                     Our vision is to keep the digital future safe.
                 </p>
-                <button className="btn-link">View all members &rarr;</button>
+
             </div>
 
             <div className="grid-side">
@@ -86,13 +86,13 @@ const MindsSection = () => {
                 .card-image {
                     width: 100%;
                     height: 100%;
-                    background: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop'); 
+                    background: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop'); 
                     background-size: cover;
                     background-position: center;
                 }
-                /* Use CSS nth-child to vary images if possible, or just keep generic for now */
-                .mind-card:nth-child(2) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop'); }
-                .mind-card:nth-child(3) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=600&auto=format&fit=crop'); }
+                /* Anonymous security-themed images - hooded/masked figures */
+                .mind-card:nth-child(2) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=600&auto=format&fit=crop'); }
+                .mind-card:nth-child(3) .card-image { background-image: linear-gradient(to bottom, transparent, var(--bg-darker)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop'); }
 
                 .card-info {
                     position: absolute;

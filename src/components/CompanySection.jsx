@@ -8,12 +8,12 @@ const CompanySection = () => {
                 <h2>Guardians of <br /> The Digital Age</h2>
                 <div className="stats-row">
                     <div className="stat">
-                        <span className="stat-num">24/7</span>
-                        <span className="stat-label">Monitoring</span>
+                        <span className="stat-num">Real-time</span>
+                        <span className="stat-label">Intelligence</span>
                     </div>
                     <div className="stat">
-                        <span className="stat-num">100+</span>
-                        <span className="stat-label">Zero-days</span>
+                        <span className="stat-num">Advanced</span>
+                        <span className="stat-label">Simulation</span>
                     </div>
                 </div>
             </div>

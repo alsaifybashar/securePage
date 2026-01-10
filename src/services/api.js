@@ -19,12 +19,6 @@ const apiRequest = async (endpoint, options = {}) => {
         ...options.headers,
     };
 
-    // Add auth token if available
-    const token = localStorage.getItem('authToken');
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-
     try {
         const response = await fetch(url, {
             ...options,
@@ -69,89 +63,13 @@ class ApiError extends Error {
 
 /**
  * Submit contact form / lead
- * @param {object} formData - { name, email, message, company?, serviceTier? }
+ * @param {object} formData - { firstName, lastName, email, company, jobTitle, message, privacyAgreed }
  */
 export const submitLead = async (formData) => {
     return apiRequest('/leads', {
         method: 'POST',
         body: JSON.stringify(formData),
     });
-};
-
-// ===========================================
-// AUTH API
-// ===========================================
-
-/**
- * Login user
- * @param {string} email 
- * @param {string} password 
- */
-export const login = async (email, password) => {
-    const response = await apiRequest('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-    });
-
-    // Store token
-    if (response.token) {
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-    }
-
-    return response;
-};
-
-/**
- * Register new user
- * @param {object} userData - { email, password, name, company? }
- */
-export const register = async (userData) => {
-    return apiRequest('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-    });
-};
-
-/**
- * Verify current session
- */
-export const verifySession = async () => {
-    try {
-        return await apiRequest('/auth/session');
-    } catch (error) {
-        // Clear invalid token
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        return { authenticated: false };
-    }
-};
-
-/**
- * Logout user
- */
-export const logout = async () => {
-    try {
-        await apiRequest('/auth/logout', { method: 'POST' });
-    } finally {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-    }
-};
-
-/**
- * Get current user from localStorage
- */
-export const getCurrentUser = () => {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-};
-
-/**
- * Check if user is authenticated
- */
-export const isAuthenticated = () => {
-    return !!localStorage.getItem('authToken');
 };
 
 // ===========================================

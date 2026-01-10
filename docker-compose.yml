@@ -1,17 +1,22 @@
 # SecurePent Full-Stack Docker Compose
-# Run: docker-compose up -d
+# =====================================
+# Deploy: docker-compose up -d
+# Stop:   docker-compose down
+# Logs:   docker-compose logs -f
 
 version: '3.8'
 
 services:
+  # ===========================================
   # PostgreSQL Database
+  # ===========================================
   postgres:
     image: postgres:16-alpine
     container_name: securepent_db
     environment:
       POSTGRES_DB: securepent_db
       POSTGRES_USER: securepent
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-secure_password_change_me}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -23,7 +28,9 @@ services:
       retries: 5
     restart: unless-stopped
 
+  # ===========================================
   # Backend API Server
+  # ===========================================
   api:
     build:
       context: ./server
@@ -32,8 +39,8 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      DATABASE_URL: postgresql://securepent:${DB_PASSWORD:-secure_password_change_me}@postgres:5432/securepent_db
-      JWT_SECRET: ${JWT_SECRET:-change_this_jwt_secret_in_production}
+      DATABASE_URL: postgresql://securepent:${DB_PASSWORD}@postgres:5432/securepent_db
+      JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: 7d
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       SMTP_HOST: ${SMTP_HOST:-}
@@ -53,15 +60,17 @@ services:
       retries: 3
     restart: unless-stopped
 
-  # Frontend (Vite build served by nginx)
+  # ===========================================
+  # Frontend (Nginx)
+  # ===========================================
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     container_name: securepent_frontend
     ports:
-      - "8080:80"
-      - "4433:443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - api
     restart: unless-stopped

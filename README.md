@@ -1,101 +1,117 @@
-# SECUREPENT - Offensive Security Platform
+# 🔒 SECUREPENT
 
-**SecurePent** is a modern, high-performance landing page for a next-generation offensive security company. Built with **React 19** and **Vite**, it features a sophisticated "Anonymous/Cyber" aesthetic, utilizing deep slate blues, electric accents, and glassmorphism to convey security, stealth, and advanced technology.
+Professional cybersecurity company website with full-stack infrastructure.
 
-## 🚀 Features
+## 🏗️ Architecture
 
-*   **⚡ Blazing Fast Performance**: Powered by Vite and React 19.
-*   **🎨 Premium Dark Blue Theme**: professionally curated palette using `Slate 900/950` backgrounds and `Electric Blue` / `Cyan` accents.
-*   **✨ Advanced UI Effects**:
-    *   Smooth CSS-only gradients and glowing vignettes.
-    *   Glassmorphism panels (backdrop-blur).
-    *   Micro-interactions (hover states, pulsing status badges).
-*   **📱 Fully Responsive**: Adaptive layouts for mobile, tablet, and desktop.
-*   **📍 Smooth Navigation**: Single-page architecture with smooth scrolling to sections (Hero, Company, Product, Team, Contact).
-*   **🔒 Secure Aesthetic**: Design elements that invoke trust and technical prowess.
+```
+Frontend (React + Vite)
+     ↓
+Nginx (Reverse Proxy + SSL)
+     ↓
+Backend API (Node.js + Express)
+     ↓
+PostgreSQL Database
+```
 
-## 🛠️ Tech Stack
-
-*   **Framework**: [React](https://react.dev/) (v19)
-*   **Build Tool**: [Vite](https://vitejs.dev/)
-*   **Styling**: Pure CSS3 (Variables, Flexbox, Grid) - *No external heavy UI libraries*.
-*   **Linting**: ESLint
-
-## 🏁 Getting Started
-
-Follow these steps to set up the project locally.
+## 🚀 Quick Deploy
 
 ### Prerequisites
+- VPS with Ubuntu 22.04+
+- Domain name
+- 2GB RAM minimum
 
-*   Node.js (v18 or higher recommended)
-*   npm (or yarn/pnpm)
+### Deploy in 5 minutes:
 
-### Installation
+```bash
+# 1. SSH into your VPS
+ssh root@YOUR_VPS_IP
 
-1.  **Clone the repository** (if applicable) or navigate to the project folder:
-    ```bash
-    cd securePage
-    ```
+# 2. Install Docker
+curl -fsSL https://get.docker.com | sh
 
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
+# 3. Clone repository
+cd /opt
+git clone https://github.com/YOUR_USERNAME/securePage.git securepent
+cd securepent
 
-3.  **Start the development server**:
-    ```bash
-    npm run dev
-    ```
+# 4. Configure environment
+cp .env.example .env
+nano .env   # Fill in your passwords
 
-4.  **Open your browser**:
-    Navigate to `http://localhost:5173` to view the application.
-
-## 📂 Project Structure
-
-```text
-src/
-├── assets/              # Static assets (images, icons)
-├── components/          # Reusable UI components & Sections
-│   ├── Hero.jsx         # Main landing area with animated mesh
-│   ├── Navigation.jsx   # Fixed top navbar with smooth scroll
-│   ├── CompanySection.jsx # Mission & stats
-│   ├── ProductSection.jsx # Features grid with glass cards
-│   ├── MindsSection.jsx   # Team members (grayscale to color hover)
-│   ├── ContactSection.jsx # Secure contact form
-│   └── ...
-├── App.jsx              # Main application component / entry point
-├── index.css            # Global styles, variables, and typography
-└── main.jsx             # React DOM root render
+# 5. Deploy
+docker compose up -d --build
 ```
 
-## 🎨 Theming & Customization
+Visit `http://YOUR_VPS_IP` 🎉
 
-The project uses a mapped CSS variable system in `src/index.css` for easy theming.
+See `VPS_DEPLOYMENT_GUIDE.md` for full instructions including SSL setup.
 
-**Key Variables:**
+---
 
-```css
-:root {
-  /* Backgrounds */
-  --bg-dark: #0f172a;    /* Slate 900 */
-  --bg-darker: #020617;  /* Slate 950 (Main Body) */
-  
-  /* Accents */
-  --accent-primary: #38bdf8; /* Sky 400 */
-  --accent-cyan: #06b6d4;    /* Cyan 500 */
-  --accent-green: #10b981;   /* System Status Clean Green */
-  
-  /* Glass Effects */
-  --card-surface: rgba(30, 41, 59, 0.4); 
-  --glass-stroke: rgba(255, 255, 255, 0.08);
-}
+## 📁 Project Structure
+
+```
+securepent/
+├── src/                    # Frontend React code
+│   ├── components/         # UI components
+│   ├── services/           # API client
+│   └── utils/              # Security utilities
+├── server/                 # Backend API
+│   ├── src/
+│   │   ├── routes/         # API endpoints
+│   │   ├── middleware/     # Auth, logging
+│   │   ├── services/       # Business logic
+│   │   └── db/             # Database
+│   └── Dockerfile
+├── docker-compose.yml      # Full-stack orchestration
+├── Dockerfile.frontend     # Frontend build
+├── nginx.conf              # Web server config
+├── .env.example            # Environment template
+└── VPS_DEPLOYMENT_GUIDE.md # Deployment guide
 ```
 
-To change the primary brand color, simply update `--accent-primary` and `--accent-cyan`.
+---
 
-## 📜 Scripts
+## 🛠️ Local Development
 
-*   `npm run dev`: Starts the local development server.
-*   `npm run build`: Builds the production-ready bundle.
-*   `npm run preview`: Preview the production build locally.
-*   `npm run lint`: Runs ESLint to check for code quality issues.
+### Frontend:
+```bash
+npm install
+npm run dev
+```
+
+### Full stack:
+```bash
+cp .env.example .env
+# Edit .env with your values
+docker compose up -d
+```
+
+---
+
+## 🔐 Security Features
+
+| Feature | Implementation |
+|---------|----------------|
+| XSS Protection | DOMPurify sanitization |
+| SQL Injection | Parameterized queries |
+| Input Validation | Regex patterns |
+| HTTPS | Let's Encrypt SSL |
+| Headers | CSP, X-Frame, HSTS |
+| Auth | JWT tokens |
+
+---
+
+## 📧 Contact Form
+
+The contact form submits to the backend API which:
+1. Validates and sanitizes input
+2. Stores lead in PostgreSQL
+3. Optionally sends email notification
+
+---
+
+## 📝 License
+
+© 2025 SECUREPENT AB
