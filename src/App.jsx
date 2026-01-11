@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Section from './components/Section';
 import CompanySection from './components/CompanySection';
 import ProductSection from './components/ProductSection';
+import ProcessSection from './components/ProcessSection';
 import MindsSection from './components/MindsSection';
 import InvestorsSection from './components/InvestorsSection';
 import ContactSection from './components/ContactSection';
@@ -22,6 +23,9 @@ function App() {
       </Section>
       <Section id="product">
         <ProductSection />
+      </Section>
+      <Section id="process">
+        <ProcessSection />
       </Section>
       <Section id="minds">
         <MindsSection />

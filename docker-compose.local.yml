@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: securepent_db
+    environment:
+      POSTGRES_USER: securepent
+      POSTGRES_DB: securepent_db
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api  # Assuming your backend Dockerfile is named this
+    container_name: securepent_api
+    environment:
+      - DB_HOST=db
+      - DB_USER=securepent
+      - DB_PASS=${DB_PASSWORD}
+      - DB_NAME=securepent_db
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: securepent_frontend
+    ports:
+      - "80:80"  # Expose port 80 directly
+    volumes:
+      # OVERRIDE: Mount our local HTTP-only config over the default one
+      - ./nginx.local.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data_local:

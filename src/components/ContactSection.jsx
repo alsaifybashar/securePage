@@ -476,9 +476,45 @@ const ContactSection = () => {
                     border: 1px solid rgba(239, 68, 68, 0.2);
                 }
 
-                @media (max-width: 600px) {
+                @media (max-width: 768px) {
+                    .contact-wrapper {
+                        padding: 0;
+                    }
+                    .contact-header h2 {
+                        font-size: 2rem;
+                    }
+                    .secure-form {
+                        padding: 1.5rem;
+                    }
                     .form-row {
                         grid-template-columns: 1fr;
+                        gap: 1rem;
+                    }
+                    input[type="text"], 
+                    input[type="email"], 
+                    textarea {
+                        padding: 0.875rem;
+                        font-size: 16px; /* Prevents zoom on iOS */
+                    }
+                    .checkbox-label {
+                        font-size: 0.85rem;
+                        align-items: flex-start;
+                    }
+                    .label-text {
+                        line-height: 1.4;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .contact-header h2 {
+                        font-size: 1.75rem;
+                    }
+                    .secure-form {
+                        padding: 1.25rem;
+                        gap: 1rem;
+                    }
+                    .submit-btn {
+                        padding: 1rem;
                     }
                 }
             `}</style>

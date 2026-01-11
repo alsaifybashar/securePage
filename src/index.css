@@ -138,3 +138,50 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-primary);
 }
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1, h2, h3, h4 {
+    letter-spacing: 0.02em;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Touch-friendly targets */
+@media (pointer: coarse) {
+  button, a, input, textarea, select {
+    min-height: 44px;
+  }
+}
+
+/* Improve text rendering on mobile */
+@media (max-width: 480px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  h1, h2 {
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+
+/* Hide scrollbar on mobile for cleaner look */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+  
+  body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
