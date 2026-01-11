@@ -21,12 +21,12 @@ services:
     restart: unless-stopped
     # OBS: Inga 'ports' här – databasen ska inte synas utåt!
 
-  # ===========================================
-  # Backend API
-  # ===========================================
+    # ===========================================
+    # Backend API
+    # ===========================================
   api:
     build:
-      context: ./server   # OBS: Kontrollera att din mapp heter 'server' (från gamla filen)
+      context: ./server # OBS: Kontrollera att din mapp heter 'server' (från gamla filen)
       dockerfile: Dockerfile
     container_name: securepent_api
     environment:
@@ -47,17 +47,19 @@ services:
     restart: unless-stopped
     # OBS: Inga 'ports' här – API:et ska bara nås via Nginx!
 
-  # ===========================================
-  # Frontend (Nginx)
-  # ===========================================
+    # ===========================================
+    # Frontend (Nginx)
+    # ===========================================
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        - VITE_API_URL=/api
     container_name: securepent_frontend
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       # VIKTIGT: Behåll certifikats-kopplingarna!

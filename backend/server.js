@@ -44,7 +44,8 @@ app.use(helmet({
 }));
 
 // CORS - Configure allowed origins
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173', 'http://localhost:8080'];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') ||
+    ['http://localhost:5173', 'http://localhost:8080', 'https://securepent.com', 'https://www.securepent.com'];
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl)

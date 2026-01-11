@@ -3,8 +3,8 @@
  * Centralized API calls to the backend
  */
 
-// Backend API URL - use relative path for production (via Nginx) or Vite proxy
-const API_BASE_URL = '/api';
+// Backend API URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Debug log (remove in production)
 console.log('API Base URL:', API_BASE_URL);
