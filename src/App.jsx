@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import Section from './components/Section';
@@ -12,32 +12,57 @@ import CookieButton from './components/CookieButton';
 import CookieModal from './components/CookieModal';
 import CookieConsent from './components/CookieConsent';
 import ThemeToggle from './components/ThemeToggle';
+import AdminPage from './pages/admin/AdminPage';
+import { analyticsTracker } from './services/analytics';
 
 function App() {
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState(null);
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
+  // Check if we're on the hidden admin route
+  useEffect(() => {
+    const path = window.location.pathname;
+    // Hidden admin URL - hard to guess
+    if (path === '/sp-admin-portal-x7k9m2') {
+      setIsAdminRoute(true);
+    }
+
+    // Handle browser back/forward
+    const handlePopState = () => {
+      const newPath = window.location.pathname;
+      setIsAdminRoute(newPath === '/sp-admin-portal-x7k9m2');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleCookieConsent = (preferences) => {
     setCookiePreferences(preferences);
-    // Here you can initialize analytics, marketing scripts, etc. based on preferences
     console.log('Cookie preferences saved:', preferences);
 
+    // Initialize analytics if statistics cookies are allowed
     if (preferences.statistics) {
-      // Initialize analytics (e.g., Google Analytics)
-      console.log('Statistics cookies enabled - analytics can be loaded');
+      analyticsTracker.init();
+      console.log('Statistics cookies enabled - analytics initialized');
     }
 
     if (preferences.marketing) {
-      // Initialize marketing scripts
       console.log('Marketing cookies enabled - marketing scripts can be loaded');
     }
 
     if (preferences.preferences) {
-      // Initialize preference-based features
       console.log('Preference cookies enabled');
     }
   };
 
+  // Render admin dashboard if on admin route
+  if (isAdminRoute) {
+    return <AdminPage />;
+  }
+
+  // Regular website
   return (
     <Layout>
       {/* Cookie Consent Banner - Shows on first visit */}

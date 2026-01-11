@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './CookieModal.css';
-import { saveCookiePreferences } from '../services/api';
 
 const CookieModal = ({ isOpen, onClose }) => {
     const [preferences, setPreferences] = useState({
         necessary: true,
-        analytics: false,
+        statistics: false,
         marketing: false,
         preferences: false
     });
@@ -14,9 +13,13 @@ const CookieModal = ({ isOpen, onClose }) => {
         // Load saved preferences
         const saved = localStorage.getItem('cookiePreferences');
         if (saved) {
-            setPreferences(JSON.parse(saved));
+            try {
+                setPreferences(JSON.parse(saved));
+            } catch (e) {
+                // Invalid JSON, use defaults
+            }
         }
-    }, []);
+    }, [isOpen]);
 
     const handleToggle = (key) => {
         if (key === 'necessary') return; // Cannot disable necessary cookies
@@ -26,50 +29,49 @@ const CookieModal = ({ isOpen, onClose }) => {
         }));
     };
 
-    const savePreferencesToBackend = async (prefs) => {
-        // Save to localStorage first (immediate)
+    const savePreferences = (prefs) => {
+        // Save to localStorage
         localStorage.setItem('cookiePreferences', JSON.stringify(prefs));
-        localStorage.setItem('cookieConsent', 'true');
 
-        // Sync to backend (async, non-blocking)
-        try {
-            await saveCookiePreferences({
-                analytics: prefs.analytics,
-                marketing: prefs.marketing,
-                preferences: prefs.preferences
-            });
-        } catch (error) {
-            // Silent fail - localStorage is the primary store
-            console.warn('Failed to sync cookie preferences to server:', error);
-        }
+        // Also update cookieConsent with timestamp
+        const consentData = {
+            timestamp: new Date().toISOString(),
+            preferences: prefs
+        };
+        localStorage.setItem('cookieConsent', JSON.stringify(consentData));
+
+        // Dispatch event for other components
+        window.dispatchEvent(new CustomEvent('cookieConsentUpdated', {
+            detail: prefs
+        }));
     };
 
     const handleSave = () => {
-        savePreferencesToBackend(preferences);
+        savePreferences(preferences);
         onClose();
     };
 
     const handleAcceptAll = () => {
         const allAccepted = {
             necessary: true,
-            analytics: true,
+            statistics: true,
             marketing: true,
             preferences: true
         };
         setPreferences(allAccepted);
-        savePreferencesToBackend(allAccepted);
+        savePreferences(allAccepted);
         onClose();
     };
 
     const handleRejectAll = () => {
         const onlyNecessary = {
             necessary: true,
-            analytics: false,
+            statistics: false,
             marketing: false,
             preferences: false
         };
         setPreferences(onlyNecessary);
-        savePreferencesToBackend(onlyNecessary);
+        savePreferences(onlyNecessary);
         onClose();
     };
 
@@ -83,8 +85,8 @@ const CookieModal = ({ isOpen, onClose }) => {
             required: true
         },
         {
-            key: 'analytics',
-            title: 'Analytics Cookies',
+            key: 'statistics',
+            title: 'Statistics Cookies',
             description: 'Help us understand how visitors interact with our website.'
         },
         {

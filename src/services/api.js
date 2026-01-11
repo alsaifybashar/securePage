@@ -1,138 +1,197 @@
 /**
- * API Client Service
- * Handles all communication with the backend API
+ * API Service
+ * Centralized API calls to the backend
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// Backend API URL - use relative path for production (via Nginx) or Vite proxy
+const API_BASE_URL = '/api';
+
+// Debug log (remove in production)
+console.log('API Base URL:', API_BASE_URL);
 
 /**
- * Make an API request
- * @param {string} endpoint - API endpoint (e.g., '/leads')
- * @param {object} options - Fetch options
- * @returns {Promise<object>}
+ * Make an API request with error handling
  */
 const apiRequest = async (endpoint, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
+    console.log('Making request to:', url); // Debug log
 
-    const headers = {
+    const defaultHeaders = {
         'Content-Type': 'application/json',
-        ...options.headers,
     };
+
+    // Add auth token if available
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+        defaultHeaders['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Add session ID for analytics
+    const sessionId = sessionStorage.getItem('sessionId');
+    if (sessionId) {
+        defaultHeaders['X-Session-ID'] = sessionId;
+    }
 
     try {
         const response = await fetch(url, {
             ...options,
-            headers,
-            credentials: 'include',
+            headers: {
+                ...defaultHeaders,
+                ...options.headers,
+            },
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new ApiError(
-                data.error || data.message || 'Request failed',
-                response.status,
-                data
-            );
+            throw new Error(data.error || `HTTP error! status: ${response.status}`);
         }
 
         return data;
     } catch (error) {
-        if (error instanceof ApiError) {
-            throw error;
-        }
-        throw new ApiError('Network error', 0, { originalError: error.message });
+        console.error(`API Error [${endpoint}]:`, error.message);
+        throw error;
     }
 };
 
 /**
- * Custom API Error class
- */
-class ApiError extends Error {
-    constructor(message, status, data) {
-        super(message);
-        this.name = 'ApiError';
-        this.status = status;
-        this.data = data;
-    }
-}
-
-// ===========================================
-// LEADS API
-// ===========================================
-
-/**
- * Submit contact form / lead
- * @param {object} formData - { firstName, lastName, email, company, jobTitle, message, privacyAgreed }
+ * Contact Form API
  */
 export const submitLead = async (formData) => {
-    return apiRequest('/leads', {
+    return apiRequest('/contact', {
         method: 'POST',
         body: JSON.stringify(formData),
     });
 };
 
-// ===========================================
-// COOKIE PREFERENCES API
-// ===========================================
+export const checkContactStatus = async (uuid) => {
+    return apiRequest(`/contact/status/${uuid}`);
+};
 
 /**
- * Save cookie preferences to server
- * @param {object} preferences - { analytics, marketing, preferences }
+ * Analytics API
  */
-export const saveCookiePreferences = async (preferences) => {
-    const visitorId = getOrCreateVisitorId();
+export const createSession = async (landingPage) => {
+    return apiRequest('/analytics/session', {
+        method: 'POST',
+        body: JSON.stringify({ landingPage }),
+    });
+};
 
-    return apiRequest('/cookies/preferences', {
+export const trackEvent = async (eventData) => {
+    const sessionId = sessionStorage.getItem('sessionId');
+    if (!sessionId) return;
+
+    return apiRequest('/analytics/track', {
         method: 'POST',
         body: JSON.stringify({
-            visitorId,
-            ...preferences,
+            sessionId,
+            ...eventData,
         }),
     });
 };
 
-/**
- * Get cookie preferences from server
- */
-export const getCookiePreferences = async () => {
-    const visitorId = localStorage.getItem('visitorId');
-    if (!visitorId) return null;
+export const sendHeartbeat = async (timeOnPage) => {
+    const sessionId = sessionStorage.getItem('sessionId');
+    if (!sessionId) return;
 
-    try {
-        const response = await apiRequest(`/cookies/preferences/${visitorId}`);
-        return response.found ? response.preferences : null;
-    } catch (error) {
-        return null;
-    }
+    return apiRequest('/analytics/heartbeat', {
+        method: 'POST',
+        body: JSON.stringify({ sessionId, timeOnPage }),
+    });
 };
 
 /**
- * Get or create visitor ID for cookie tracking
+ * Auth API
  */
-const getOrCreateVisitorId = () => {
-    let visitorId = localStorage.getItem('visitorId');
-    if (!visitorId) {
-        visitorId = crypto.randomUUID();
-        localStorage.setItem('visitorId', visitorId);
+export const adminLogin = async (username, password) => {
+    const response = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+    });
+
+    if (response.success && response.token) {
+        localStorage.setItem('adminToken', response.token);
+        localStorage.setItem('adminUser', JSON.stringify(response.user));
     }
-    return visitorId;
+
+    return response;
 };
 
-// ===========================================
-// HEALTH CHECK
-// ===========================================
+export const adminLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+    return apiRequest('/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({ currentPassword, newPassword }),
+    });
+};
+
+export const updateUsername = async (currentPassword, newUsername) => {
+    return apiRequest('/auth/update-username', {
+        method: 'PUT',
+        body: JSON.stringify({ currentPassword, newUsername }),
+    });
+};
 
 /**
- * Check if API is available
+ * Admin Dashboard API
  */
-export const checkApiHealth = async () => {
-    try {
-        const response = await apiRequest('/health');
-        return response.status === 'healthy';
-    } catch (error) {
-        return false;
-    }
+export const getDashboardStats = async () => {
+    return apiRequest('/admin/dashboard');
 };
 
-export { ApiError };
+export const getContacts = async (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiRequest(`/admin/contacts?${queryString}`);
+};
+
+export const getContact = async (id) => {
+    return apiRequest(`/admin/contacts/${id}`);
+};
+
+export const updateContactStatus = async (id, status) => {
+    return apiRequest(`/admin/contacts/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status }),
+    });
+};
+
+export const getSessions = async (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiRequest(`/admin/analytics/sessions?${queryString}`);
+};
+
+export const getEvents = async (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiRequest(`/admin/analytics/events?${queryString}`);
+};
+
+export const getClickData = async (days = 7) => {
+    return apiRequest(`/admin/analytics/clicks?days=${days}`);
+};
+
+export const getChartData = async (metric = 'visitors', days = 30) => {
+    return apiRequest(`/admin/analytics/chart-data?metric=${metric}&days=${days}`);
+};
+
+export default {
+    submitLead,
+    checkContactStatus,
+    createSession,
+    trackEvent,
+    sendHeartbeat,
+    adminLogin,
+    adminLogout,
+    getDashboardStats,
+    getContacts,
+    getContact,
+    updateContactStatus,
+    getSessions,
+    getEvents,
+    getClickData,
+    getChartData,
+};
