@@ -14,6 +14,7 @@ import CookieConsent from './components/CookieConsent';
 import ThemeToggle from './components/ThemeToggle';
 import AdminPage from './pages/admin/AdminPage';
 import { analyticsTracker } from './services/analytics';
+import clarityService from './services/clarity';
 
 function App() {
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
@@ -38,6 +39,20 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Listen for cookie consent changes
+  useEffect(() => {
+    const handleConsentUpdate = (event) => {
+      const prefs = event.detail;
+      if (prefs.statistics && !clarityService.isInitialized()) {
+        clarityService.init();
+        clarityService.consent(true);
+      }
+    };
+
+    window.addEventListener('cookieConsentUpdated', handleConsentUpdate);
+    return () => window.removeEventListener('cookieConsentUpdated', handleConsentUpdate);
+  }, []);
+
   const handleCookieConsent = (preferences) => {
     setCookiePreferences(preferences);
     console.log('Cookie preferences saved:', preferences);
@@ -46,6 +61,11 @@ function App() {
     if (preferences.statistics) {
       analyticsTracker.init();
       console.log('Statistics cookies enabled - analytics initialized');
+
+      // Initialize Microsoft Clarity for behavior analytics
+      clarityService.init();
+      clarityService.consent(true);
+      console.log('Microsoft Clarity initialized');
     }
 
     if (preferences.marketing) {

@@ -100,6 +100,11 @@ Access:
 - 📋 **Security Headers** - Helmet.js CSP, HSTS, etc.
 - 🗄️ **Prepared Statements** - SQL injection proof database queries
 
+### Analytics (GDPR Compliant)
+- 📊 **Microsoft Clarity** - Heatmaps, session recordings, user behavior insights
+- 📈 **Custom Analytics** - Page views, clicks, scroll depth tracking
+- 🍪 **Consent-Based** - Only activates when user accepts statistics cookies
+
 ---
 
 ## 🏗️ Architecture

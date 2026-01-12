@@ -16,6 +16,7 @@
     "audit:fix": "npm audit fix"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.2",
     "dompurify": "^3.3.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

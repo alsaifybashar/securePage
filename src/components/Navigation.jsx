@@ -57,7 +57,6 @@ const Navigation = () => {
         { label: 'Services', id: 'product' },
         { label: 'Process', id: 'process' },
         { label: 'Team', id: 'minds' },
-        { label: 'Contact', id: 'contact' },
     ];
 
     return (
@@ -83,7 +82,7 @@ const Navigation = () => {
                 </div>
 
                 {/* Mobile Hamburger Button */}
-                <button 
+                <button
                     className={`hamburger-btn ${mobileMenuOpen ? 'open' : ''}`}
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     aria-label="Toggle menu"
@@ -96,7 +95,7 @@ const Navigation = () => {
 
             {/* Mobile Menu Overlay */}
             <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={() => setMobileMenuOpen(false)}></div>
-            
+
             {/* Mobile Menu */}
             <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
                 <ul className="mobile-nav-links">

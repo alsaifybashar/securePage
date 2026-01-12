@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { sanitizeInput, validateInput } from '../utils/security';
 import { submitLead } from '../services/api';
 import PrivacyPolicyModal from './PrivacyPolicyModal';
+import clarityService from '../services/clarity';
 
 const ContactSection = () => {
     const [focused, setFocused] = useState(null);
@@ -93,6 +94,9 @@ const ContactSection = () => {
             };
 
             await submitLead(cleanData);
+
+            // Upgrade Clarity session priority for this lead
+            clarityService.upgrade('contact_form_submitted');
 
             setSubmitStatus('success');
             setFormData({

@@ -20,6 +20,9 @@ import { requestLogger } from './middleware/requestLogger.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust proxy (Nginx) for correct IP detection and rate limiting
+app.set('trust proxy', 1);
+
 // ===========================================
 // Security Middleware
 // ===========================================
@@ -37,12 +40,33 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false,
 }));
 
-// CORS Configuration
+// CORS Configuration - Allow multiple origins
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || 'http://localhost:5173,http://localhost:8080')
+    .split(',')
+    .map(origin => origin.trim());
+
+// Add production domains if not already present
+if (!allowedOrigins.includes('https://securepent.com')) {
+    allowedOrigins.push('https://securepent.com');
+}
+if (!allowedOrigins.includes('https://www.securepent.com')) {
+    allowedOrigins.push('https://www.securepent.com');
+}
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, same-origin)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) === -1) {
+            console.warn(`CORS blocked request from: ${origin}`);
+            return callback(new Error('CORS policy does not allow this origin'), false);
+        }
+        return callback(null, true);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-ID'],
 }));
 
 // Rate Limiting - Protect against brute force

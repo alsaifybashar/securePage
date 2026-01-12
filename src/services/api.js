@@ -3,18 +3,14 @@
  * Centralized API calls to the backend
  */
 
-// Backend API URL
+// Backend API URL - uses relative path, proxied by Nginx in production
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-
-// Debug log (remove in production)
-console.log('API Base URL:', API_BASE_URL);
 
 /**
  * Make an API request with error handling
  */
 const apiRequest = async (endpoint, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
-    console.log('Making request to:', url); // Debug log
 
     const defaultHeaders = {
         'Content-Type': 'application/json',
