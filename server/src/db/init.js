@@ -162,6 +162,39 @@ async function initDatabase() {
         console.log('📝 Creating schema...');
         await client.query(schema);
 
+        // Create default admin user if not exists
+        console.log('👤 Checking for admin user...');
+        const existingAdmin = await client.query(
+            "SELECT id FROM users WHERE email = 'admin@securepent.com' OR name = 'admin'"
+        );
+
+        if (existingAdmin.rows.length === 0) {
+            // Import argon2 dynamically
+            const argon2 = await import('argon2');
+
+            // Hash the default password
+            const passwordHash = await argon2.default.hash('admin123', {
+                type: argon2.default.argon2id,
+                memoryCost: 65536,
+                timeCost: 3,
+                parallelism: 4,
+            });
+
+            await client.query(
+                `INSERT INTO users (email, password_hash, name, role, is_active, email_verified)
+                 VALUES ($1, $2, $3, 'admin', true, true)`,
+                ['admin@securepent.com', passwordHash, 'admin']
+            );
+
+            console.log('✅ Default admin user created:');
+            console.log('   Email: admin@securepent.com');
+            console.log('   Username: admin');
+            console.log('   Password: admin123');
+            console.log('   ⚠️  CHANGE THIS PASSWORD IMMEDIATELY!');
+        } else {
+            console.log('ℹ️  Admin user already exists');
+        }
+
         console.log('✅ Database initialized successfully!');
         console.log('\n📋 Tables created:');
         console.log('   - users');

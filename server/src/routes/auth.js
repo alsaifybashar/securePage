@@ -7,10 +7,16 @@ import { logAudit } from '../services/auditService.js';
 
 const router = Router();
 
-// Validation rules
+// Validation rules - accept either username or email for login
 const loginValidation = [
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password').isLength({ min: 1 }).withMessage('Password required'),
+    // Either email or username must be provided
+    body().custom((value, { req }) => {
+        if (!req.body.email && !req.body.username) {
+            throw new Error('Email or username required');
+        }
+        return true;
+    }),
 ];
 
 const registerValidation = [
@@ -26,22 +32,30 @@ const registerValidation = [
 /**
  * POST /api/auth/login
  * Authenticate user and return JWT token
+ * Accepts either { email, password } or { username, password }
  */
 router.post('/login', loginValidation, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({
+                success: false,
+                error: 'Validation failed',
+                errors: errors.array()
+            });
         }
 
-        const { email, password } = req.body;
+        const { email, username, password } = req.body;
         const ip = req.ip || req.connection.remoteAddress;
         const userAgent = req.get('User-Agent');
 
-        // Find user
+        // Use email if provided, otherwise use username
+        const loginIdentifier = email || username;
+
+        // Find user by email or username
         const result = await query(
-            'SELECT * FROM users WHERE email = $1 AND is_active = true',
-            [email]
+            'SELECT * FROM users WHERE (email = $1 OR name = $1) AND is_active = true',
+            [loginIdentifier]
         );
 
         const user = result.rows[0];
@@ -49,10 +63,11 @@ router.post('/login', loginValidation, async (req, res) => {
         if (!user) {
             await logAudit(null, 'login_failed', 'user', null, ip, userAgent, {
                 reason: 'user_not_found',
-                email
+                identifier: loginIdentifier
             }, 'warning');
 
             return res.status(401).json({
+                success: false,
                 error: 'Invalid credentials',
                 message: 'Email or password incorrect'
             });
@@ -64,6 +79,7 @@ router.post('/login', loginValidation, async (req, res) => {
             const remainingSecs = Math.ceil(remainingMs / 1000);
 
             return res.status(423).json({
+                success: false,
                 error: 'Account locked',
                 message: `Too many failed attempts. Try again in ${remainingSecs} seconds.`,
                 retryAfter: remainingSecs
@@ -91,6 +107,7 @@ router.post('/login', loginValidation, async (req, res) => {
             }, 'warning');
 
             return res.status(401).json({
+                success: false,
                 error: 'Invalid credentials',
                 message: lockUntil
                     ? 'Account locked for 30 seconds due to failed attempts.'
@@ -125,12 +142,14 @@ router.post('/login', loginValidation, async (req, res) => {
         await logAudit(user.id, 'login_success', 'user', user.id, ip, userAgent, {}, 'info');
 
         res.json({
+            success: true,
             message: 'Authentication successful',
             token,
             user: {
                 id: user.id,
                 email: user.email,
                 name: user.name,
+                username: user.name, // for frontend compatibility
                 role: user.role
             }
         });
