@@ -71,25 +71,25 @@ app.use(cors({
 
 // Rate Limiting - Protect against brute force
 const limiter = rateLimit({
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
     max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
     message: {
-        error: 'Too many requests from this IP, please try again later.',
-        retryAfter: '15 minutes'
+        error: 'Too many requests. Please try again later.'
     },
-    standardHeaders: true,
+    standardHeaders: false,  // Don't expose rate limit info in headers
     legacyHeaders: false,
 });
 app.use('/api/', limiter);
 
 // Stricter rate limit for auth endpoints
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 login attempts per window
+    windowMs: 15 * 60 * 1000,
+    max: 5,
     message: {
-        error: 'Too many login attempts. Account temporarily locked.',
-        retryAfter: '15 minutes'
+        error: 'Too many attempts. Please try again later.'
     },
+    standardHeaders: false,
+    legacyHeaders: false,
 });
 app.use('/api/auth/login', authLimiter);
 

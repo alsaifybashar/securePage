@@ -1,0 +1,102 @@
+# ===========================================
+# SECUREPENT DOCKERIGNORE
+# Prevents sensitive files from being copied to containers
+# ===========================================
+
+# Environment files (CRITICAL - contains secrets)
+.env
+.env.*
+!.env.example
+*.env
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# CI/CD configurations
+.github
+.gitlab-ci.yml
+.travis.yml
+.circleci
+Jenkinsfile
+
+# Infrastructure as Code
+.terraform
+*.tfstate
+*.tfvars
+.k8s
+kubernetes
+helm
+
+# Database files and backups
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+dump.*
+backup.*
+*.bak
+*.backup
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test files
+__tests__
+*.test.js
+*.spec.js
+coverage
+.nyc_output
+
+# Documentation (not needed in container)
+*.md
+!README.md
+docs/
+
+# Development dependencies
+node_modules
+
+# Build artifacts (frontend builds separately)
+dist
+build
+.cache
+
+# Temporary files
+tmp
+temp
+*.tmp
+*.temp
+
+# Credentials and secrets
+.credentials
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials/
+
+# Config backups
+*.config.bak
+config.*.bak
+*.conf.bak
+*.ini
+
+# Misc
+.htaccess
+.htpasswd
+*.map

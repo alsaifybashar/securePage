@@ -10,9 +10,9 @@
 
 
   <!-- Security Meta Tags -->
-  <!-- CSP: Restricts resources to trusted sources. Note: 'unsafe-inline'/'unsafe-eval' allowed for Vite Dev; remove for Production -->
+  <!-- Note: Production CSP is enforced by nginx, this is for development only -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self' http://localhost:3001 ws://localhost:5173; object-src 'none'; base-uri 'self'; form-action 'self';">
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.clarity.ms https://*.clarity.ms; object-src 'none'; base-uri 'self'; form-action 'self';">
   <!-- X-Content-Type-Options: Prevents MIME-sniffing -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <!-- Referrer-Policy: Protects user privacy and prevents leakage of sensitive URL parameters -->
