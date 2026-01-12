@@ -155,8 +155,13 @@ router.post('/login', loginValidation, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ error: 'Authentication failed' });
+        console.error('Login error:', error.message);
+        console.error('Login error stack:', error.stack);
+        res.status(500).json({
+            success: false,
+            error: 'Authentication failed',
+            message: error.message
+        });
     }
 });
 
