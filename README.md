@@ -1,16 +1,16 @@
-# 🔒 SecurePent - Advanced Cybersecurity Website
+# 🔒 SecurePent - Offensive Security Platform
 
 <div align="center">
 
 ![SecurePent](https://img.shields.io/badge/SecurePent-Cybersecurity-00d4aa?style=for-the-badge&logo=shield&logoColor=white)
-![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=for-the-badge&logo=node.js&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-**A premium, secure, and fully-functional cybersecurity company website with integrated analytics, contact management, and hidden admin dashboard.**
+**A premium, secure cybersecurity company website with integrated analytics, lead management, and admin dashboard.**
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Architecture](#-architecture) • [Security](#-security-features) • [Documentation](#-documentation)
+🌐 **Live**: [https://securepent.com](https://securepent.com)
 
 </div>
 
@@ -19,12 +19,12 @@
 ## 📋 Table of Contents
 
 - [Quick Start](#-quick-start)
+- [Production Deployment](#-production-deployment)
 - [Features](#-features)
 - [Architecture](#-architecture)
-- [Pages & Components](#-pages--components)
-- [Security Features](#-security-features)
-- [How It Works](#-how-it-works)
+- [Admin Dashboard](#-admin-dashboard)
 - [API Reference](#-api-reference)
+- [Security](#-security-features)
 - [Configuration](#-configuration)
 - [Troubleshooting](#-troubleshooting)
 
@@ -32,310 +32,220 @@
 
 ## 🚀 Quick Start
 
-### Option 1: Docker (Recommended - One Command)
+### Local Development
+
+**Prerequisites**: Node.js 20+, Docker & Docker Compose
+
+#### Option 1: Docker (Recommended)
 
 ```bash
-# Clone and start everything
-cd /home/wsl-bashar/securePage
-docker-compose up --build
+# Clone repository
+git clone https://github.com/alsaifybashar/securePage.git
+cd securePage
+
+# Start all services
+docker compose up --build -d
+
+# View logs
+docker compose logs -f
 ```
 
-Access:
-- **Website**: http://localhost
-- **Admin**: http://localhost/sp-admin-portal-x7k9m2
+**Access**:
+- 🌐 **Website**: http://localhost:8080
+- 🔐 **Admin**: http://localhost:8080/sp-admin-portal-x7k9m2
+- 📊 **API Health**: http://localhost:8080/api/health
 
-### Option 2: Development Mode (Two Terminals)
+#### Option 2: Development Mode (Hot Reload)
 
 **Terminal 1 - Backend:**
 ```bash
-cd /home/wsl-bashar/securePage/backend
+cd server
 npm install
 npm run dev
 ```
 
 **Terminal 2 - Frontend:**
 ```bash
-cd /home/wsl-bashar/securePage
 npm install
 npm run dev
 ```
 
-Access:
-- **Website**: http://localhost:5173
-- **Admin**: http://localhost:5173/sp-admin-portal-x7k9m2
-- **API Health**: http://localhost:3001/api/health
+**Access**:
+- 🌐 **Website**: http://localhost:5173
+- 🔐 **Admin**: http://localhost:5173/sp-admin-portal-x7k9m2
 
-### Admin Credentials
+---
 
-| Field | Value |
-|-------|-------|
-| **Username** | `admin` |
-| **Password** | `admin123` |
+## 🌐 Production Deployment
 
-> ⚠️ **IMPORTANT**: Change these credentials immediately in production!
+### Server Requirements
+
+- **OS**: Ubuntu 22.04+ / Debian 12+
+- **Docker**: v20+
+- **Docker Compose**: v2+
+- **Domain**: DNS pointing to server IP
+- **SSL**: Let's Encrypt (automated)
+
+### Deployment Steps
+
+```bash
+# 1. SSH into your server
+ssh user@78.109.17.223
+
+# 2. Clone repository
+cd /opt
+git clone https://github.com/alsaifybashar/securePage.git securepent
+cd securepent
+
+# 3. Generate SSL certificates
+sudo certbot certonly --standalone \
+  -d securepent.com \
+  -d www.securepent.com
+
+# 4. Configure environment
+cp env.production.template .env
+nano .env  # Set passwords and secrets
+
+# 5. Deploy
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### Environment Variables (.env)
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DB_PASSWORD` | ✅ | PostgreSQL password |
+| `JWT_SECRET` | ✅ | JWT signing key (64+ chars) |
+| `SMTP_HOST` | ❌ | Email server for notifications |
+| `SMTP_PORT` | ❌ | SMTP port (usually 587) |
+| `SMTP_USER` | ❌ | Email username |
+| `SMTP_PASS` | ❌ | Email password |
+| `NOTIFICATION_EMAIL` | ❌ | Recipient for contact forms |
+| `VITE_CLARITY_PROJECT_ID` | ❌ | Microsoft Clarity ID |
+
+**Generate secure values:**
+```bash
+# Database password
+openssl rand -base64 32
+
+# JWT secret
+openssl rand -base64 64
+```
 
 ---
 
 ## ✨ Features
 
-### Public Website
-- 🎨 **Premium Dark Theme** - Modern, high-tech aesthetic
-- 📱 **Fully Responsive** - Mobile, tablet, and desktop optimized
-- 🍪 **GDPR Cookie Consent** - Three-tab consent banner with preferences
-- 📧 **Secure Contact Form** - Multi-layer validation and sanitization
-- 🔗 **Smooth Navigation** - Single-page scroll with animated sections
-- ⚡ **Performance Optimized** - Lazy loading, optimized assets
+### 🌐 Public Website
 
-### Admin Dashboard (Hidden)
-- 📊 **Analytics Dashboard** - Visitor counts, page views, session duration
-- 👥 **Contact Management** - View, manage, and respond to inquiries
-- 📈 **Traffic Insights** - Device types, browsers, top pages
-- 🔐 **Secure Authentication** - JWT with account lockout protection
-- 📝 **Audit Logging** - All admin actions tracked
+| Feature | Description |
+|---------|-------------|
+| **Premium Dark Theme** | Modern, high-tech aesthetic with glassmorphism |
+| **Fully Responsive** | Optimized for mobile, tablet, and desktop |
+| **GDPR Cookie Consent** | Compliant banner with preference management |
+| **Secure Contact Form** | Multi-layer validation and sanitization |
+| **Smooth Navigation** | Single-page scroll with animated sections |
+| **Microsoft Clarity** | Heatmaps and session recordings (consent-based) |
 
-### Security
-- 🛡️ **Input Sanitization** - XSS and SQL injection prevention
-- 🔒 **Rate Limiting** - DDoS and brute force protection
-- 🔑 **JWT Authentication** - Secure token-based auth
-- 📋 **Security Headers** - Helmet.js CSP, HSTS, etc.
-- 🗄️ **Prepared Statements** - SQL injection proof database queries
+### 🔐 Admin Dashboard
 
-### Analytics (GDPR Compliant)
-- 📊 **Microsoft Clarity** - Heatmaps, session recordings, user behavior insights
-- 📈 **Custom Analytics** - Page views, clicks, scroll depth tracking
-- 🍪 **Consent-Based** - Only activates when user accepts statistics cookies
+| Feature | Description |
+|---------|-------------|
+| **Analytics Overview** | Visitors, page views, session duration |
+| **Lead Management** | View, filter, and manage contact submissions |
+| **Traffic Insights** | Device types, browsers, geographic data |
+| **Audit Logging** | All admin actions tracked |
+| **Settings** | Change username and password |
+
+### 🛡️ Security
+
+| Feature | Description |
+|---------|-------------|
+| **Input Sanitization** | XSS and SQL injection prevention |
+| **Rate Limiting** | DDoS and brute force protection |
+| **Argon2id Hashing** | Industry-leading password security |
+| **JWT Authentication** | Secure token-based sessions |
+| **Security Headers** | HSTS, CSP, X-Frame-Options |
+| **Account Lockout** | Auto-lock after failed attempts |
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              USER BROWSER                                    │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      │ HTTPS
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         NGINX (Docker: Port 80)                             │
-│  ┌─────────────────────────────────┐  ┌─────────────────────────────────┐  │
-│  │     STATIC FILES (React SPA)    │  │      REVERSE PROXY (/api/*)     │  │
-│  │  • index.html                   │  │  → Routes to Backend:3001       │  │
-│  │  • CSS/JS bundles               │  │  → Adds security headers        │  │
-│  │  • Assets                       │  │  → Handles CORS                 │  │
-│  └─────────────────────────────────┘  └─────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      │ HTTP (Internal Network)
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      BACKEND (Node.js + Express : Port 3001)                │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────────┐  │
-│  │ SECURITY LAYER   │  │   API ROUTES     │  │    MIDDLEWARE            │  │
-│  │ • Helmet.js      │  │ • /api/contact   │  │ • Rate Limiting          │  │
-│  │ • CORS           │  │ • /api/analytics │  │ • Request Logging        │  │
-│  │ • Rate Limiter   │  │ • /api/auth      │  │ • Error Handler          │  │
-│  │ • Input Sanitize │  │ • /api/admin     │  │ • JWT Verification       │  │
-│  └──────────────────┘  └──────────────────┘  └──────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      │ SQL (Prepared Statements)
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         DATABASE (SQLite)                                    │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────────────────┐   │
-│  │    contacts     │ │ analytics_      │ │      admin_users            │   │
-│  │ • id            │ │ sessions        │ │ • id                        │   │
-│  │ • first_name    │ │ • session_id    │ │ • username                  │   │
-│  │ • last_name     │ │ • visitor_id    │ │ • password_hash (bcrypt)    │   │
-│  │ • email         │ │ • ip_address    │ │ • failed_attempts           │   │
-│  │ • company       │ │ • device_type   │ │ • locked_until              │   │
-│  │ • message       │ │ • browser       │ └─────────────────────────────┘   │
-│  │ • ip_address    │ │ • page_views    │ ┌─────────────────────────────┐   │
-│  │ • status        │ └─────────────────┘ │    admin_audit_log          │   │
-│  └─────────────────┘ ┌─────────────────┐ │ • admin_id                  │   │
-│                      │ analytics_      │ │ • action                    │   │
-│                      │ events          │ │ • ip_address                │   │
-│                      │ • event_type    │ │ • timestamp                 │   │
-│                      │ • page_url      │ └─────────────────────────────┘   │
-│                      │ • click_data    │                                    │
-│                      └─────────────────┘                                    │
-└─────────────────────────────────────────────────────────────────────────────┘
+                     ┌─────────────────────────────────────┐
+                     │           INTERNET                   │
+                     │    https://securepent.com           │
+                     └───────────────┬─────────────────────┘
+                                     │
+                     ┌───────────────▼─────────────────────┐
+                     │      NGINX (Port 80/443)            │
+                     │  • SSL Termination                  │
+                     │  • Static Files                     │
+                     │  • Reverse Proxy → /api             │
+                     │  • Security Headers                 │
+                     └───────────────┬─────────────────────┘
+                                     │
+          ┌──────────────────────────┼──────────────────────────┐
+          │                          │                          │
+          ▼                          ▼                          ▼
+┌─────────────────┐     ┌─────────────────────┐     ┌─────────────────┐
+│  Static Files   │     │   API Server        │     │   PostgreSQL    │
+│  (React SPA)    │     │   (Node.js:3001)    │     │   (Port 5432)   │
+│                 │     │                     │     │                 │
+│  • index.html   │     │  • /api/auth        │     │  • users        │
+│  • CSS/JS       │     │  • /api/leads       │     │  • leads        │
+│  • Assets       │     │  • /api/health      │     │  • sessions     │
+│                 │     │  • /api/cookies     │     │  • audit_log    │
+└─────────────────┘     └─────────────────────┘     └─────────────────┘
 ```
 
-### Data Flow Diagram
+### Docker Services
 
-```
-┌──────────────┐     ┌───────────────┐     ┌──────────────┐     ┌───────────┐
-│   VISITOR    │────▶│  COOKIE       │────▶│  ANALYTICS   │────▶│  DATABASE │
-│   ARRIVES    │     │  CONSENT      │     │  TRACKER     │     │  STORAGE  │
-└──────────────┘     └───────────────┘     └──────────────┘     └───────────┘
-                            │                                          │
-                            │ If Accepted                              │
-                            ▼                                          ▼
-                     ┌───────────────┐     ┌──────────────┐     ┌───────────┐
-                     │    BROWSE     │────▶│   CONTACT    │────▶│   ADMIN   │
-                     │    WEBSITE    │     │   FORM       │     │  REVIEWS  │
-                     └───────────────┘     └──────────────┘     └───────────┘
-                            │                     │                    │
-                            │ Tracks              │ Sanitizes          │ Via
-                            ▼                     ▼                    ▼
-                     ┌───────────────┐     ┌──────────────┐     ┌───────────┐
-                     │ • Page Views  │     │ • XSS Check  │     │ DASHBOARD │
-                     │ • Clicks      │     │ • SQL Check  │     │ • Stats   │
-                     │ • Scroll      │     │ • Validate   │     │ • Contacts│
-                     │ • Time        │     │ • Store      │     │ • Charts  │
-                     └───────────────┘     └──────────────┘     └───────────┘
-```
+| Container | Image | Purpose |
+|-----------|-------|---------|
+| `securepent_frontend` | nginx:alpine | Serves React app, proxies API |
+| `securepent_api` | node:20-alpine | Express.js API server |
+| `securepent_db` | postgres:16-alpine | PostgreSQL database |
 
 ---
 
-## 📄 Pages & Components
+## 🔐 Admin Dashboard
 
-### Public Pages
+### Access
 
-| Section | Description | Features |
-|---------|-------------|----------|
-| **Hero** | Landing section | Animated background, CTAs, tagline |
-| **About** | Company information | Stats, mission statement, values |
-| **Services** | Two service tiers | Feature lists, pricing cards |
-| **Process** | How it works | 5-step process with icons |
-| **Team** | Team members | Profile cards with roles |
-| **Trust** | Trust signals | Methodology, certifications |
-| **Contact** | Contact form | Full validation, sanitization |
+| Environment | URL |
+|-------------|-----|
+| **Production** | https://securepent.com/sp-admin-portal-x7k9m2 |
+| **Local Docker** | http://localhost:8080/sp-admin-portal-x7k9m2 |
+| **Development** | http://localhost:5173/sp-admin-portal-x7k9m2 |
 
-### Admin Pages (Hidden)
+### Default Credentials
 
-| Page | URL | Description |
-|------|-----|-------------|
-| **Login** | `/sp-admin-portal-x7k9m2` | Secure admin authentication |
-| **Dashboard** | (After login) | Analytics overview |
-| **Contacts** | (Tab in dashboard) | Manage contact submissions |
-| **Analytics** | (Tab in dashboard) | Detailed visitor insights |
+| Field | Value |
+|-------|-------|
+| **Email** | `admin@securepent.com` |
+| **Password** | `admin123` |
 
-### Special Components
+> ⚠️ **IMPORTANT**: Change password immediately after first login!
 
-| Component | Purpose |
-|-----------|---------|
-| **CookieConsent** | GDPR-compliant cookie banner with 3 tabs |
-| **CookieModal** | Settings modal for changing preferences |
-| **PrivacyPolicy** | Legal privacy policy modal |
-| **ThemeToggle** | Dark/light mode switcher |
-| **Navigation** | Responsive nav with mobile hamburger menu |
+### Reset Admin Password
 
----
+If locked out or forgot password:
 
-## 🛡️ Security Features
+```bash
+# Delete admin and let system recreate
+docker exec -it securepent_db psql -U securepent -d securepent_db \
+  -c "DELETE FROM users WHERE email = 'admin@securepent.com';"
 
-### 1. Input Sanitization (Client-Side)
+# Restart API to recreate admin
+docker compose -f docker-compose.prod.yml restart api
 
-```javascript
-// Using DOMPurify - removes all malicious HTML/JS
-sanitizeInput(userInput) → Clean string
+# Wait for initialization
+sleep 15
 
-// Pattern validation - detects SQL injection attempts
-validateInput(input, 'no-sql') → Boolean
-
-// Command injection detection
-validateInput(input, 'no-command') → Boolean
-```
-
-**Protected Against:**
-- ✅ XSS (Cross-Site Scripting)
-- ✅ HTML Injection
-- ✅ JavaScript Injection
-- ✅ Event Handler Injection
-
-### 2. Input Sanitization (Server-Side)
-
-```javascript
-// Multi-layer sanitization
-sanitizeString(input)   → Removes HTML, trims, limits length
-sanitizeName(input)     → Only letters, spaces, hyphens
-sanitizeEmail(input)    → Validates and normalizes email
-sanitizeMessage(input)  → Allows newlines, strict length limit
-```
-
-**Protected Against:**
-- ✅ SQL Injection (pattern detection + prepared statements)
-- ✅ XSS (server-side HTML stripping)
-- ✅ Buffer Overflow (length limits)
-- ✅ Null Byte Injection
-
-### 3. Authentication Security
-
-| Feature | Implementation |
-|---------|----------------|
-| **Password Hashing** | bcrypt with 12 rounds |
-| **JWT Tokens** | Signed with secret, 24h expiry |
-| **Account Lockout** | 5 failed attempts → 15min lock |
-| **Timing Attack Prevention** | Constant-time comparison |
-| **Audit Logging** | All auth actions logged |
-
-### 4. Rate Limiting
-
-| Endpoint | Limit | Window |
-|----------|-------|--------|
-| General API | 100 requests | 15 minutes |
-| Login | 5 attempts | 15 minutes |
-
-### 5. Security Headers (Helmet.js)
-
-```
-Content-Security-Policy: default-src 'self'; script-src 'self' ...
-X-Content-Type-Options: nosniff
-X-Frame-Options: SAMEORIGIN
-X-XSS-Protection: 1; mode=block
-Referrer-Policy: strict-origin-when-cross-origin
-```
-
-### 6. Database Security
-
-- **Prepared Statements** - All queries use parameterized inputs
-- **No Dynamic SQL** - Query strings never contain user input
-- **Index Protection** - Optimized queries prevent DoS
-- **WAL Mode** - Write-ahead logging for integrity
-
-### 7. CORS Configuration
-
-```javascript
-// Only allowed origins can access the API
-allowedOrigins: ['http://localhost:5173', 'http://localhost:3000']
-credentials: true
-methods: ['GET', 'POST', 'PUT', 'DELETE']
-```
-
----
-
-## ⚙️ How It Works
-
-### Contact Form Submission Flow
-
-```
-User fills form → Client validation → Client sanitization → 
-API POST /contact → Server validation → Server sanitization →
-Prepared statement → SQLite INSERT → Success response →
-Form cleared → User sees confirmation
-```
-
-### Analytics Tracking Flow
-
-```
-User accepts cookies → Session created (UUID) →
-Page view tracked → Clicks on buttons tracked →
-Scroll depth recorded → Heartbeat updates duration →
-Exit event on page leave → All data in dashboard
-```
-
-### Admin Authentication Flow
-
-```
-Admin visits hidden URL → Enters credentials →
-Rate limit check → Username lookup → Password bcrypt compare →
-Failed? → Increment attempts → Check lockout →
-Success? → Generate JWT → Store in localStorage →
-All admin requests include Bearer token →
-Token verified on each protected route
+# Login with: admin@securepent.com / admin123
 ```
 
 ---
@@ -344,209 +254,262 @@ Token verified on each protected route
 
 ### Public Endpoints
 
-#### Contact Form
-```http
-POST /api/contact
-Content-Type: application/json
-
-{
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@company.com",
-    "company": "ACME Corp",
-    "jobTitle": "CISO",
-    "message": "We need a security audit..."
-}
-
-Response (201):
-{
-    "success": true,
-    "message": "Your message has been received.",
-    "id": "uuid-here"
-}
-```
-
-#### Analytics
-```http
-POST /api/analytics/session
-{ "landingPage": "/" }
-
-POST /api/analytics/track
-{ "sessionId": "...", "eventType": "page_view", "pageUrl": "/" }
-
-POST /api/analytics/heartbeat
-{ "sessionId": "...", "timeOnPage": 120 }
-```
-
 #### Health Check
 ```http
 GET /api/health
 
-Response:
-{ "status": "healthy", "uptime": 123.45 }
+Response 200:
+{
+  "status": "healthy",
+  "timestamp": "2026-01-12T22:00:00.000Z",
+  "uptime": 3600,
+  "database": { "status": "connected" }
+}
 ```
 
-### Protected Endpoints (Require JWT)
-
+#### Submit Lead (Contact Form)
 ```http
-Authorization: Bearer <jwt-token>
+POST /api/leads
+Content-Type: application/json
 
+{
+  "name": "John Doe",
+  "email": "john@company.com",
+  "company": "ACME Corp",
+  "message": "We need a security audit..."
+}
+
+Response 201:
+{
+  "success": true,
+  "message": "Lead submitted successfully"
+}
+```
+
+### Protected Endpoints
+
+All require `Authorization: Bearer <token>` header.
+
+#### Login
+```http
 POST /api/auth/login
-GET  /api/admin/dashboard
-GET  /api/admin/contacts
-GET  /api/admin/contacts/:id
-PUT  /api/admin/contacts/:id/status
-GET  /api/admin/analytics/sessions
-GET  /api/admin/analytics/events
-GET  /api/admin/analytics/clicks
-GET  /api/admin/analytics/chart-data
+Content-Type: application/json
+
+{
+  "email": "admin@securepent.com",
+  "password": "admin123"
+}
+
+Response 200:
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "user": { "id": "uuid", "email": "admin@securepent.com", "role": "admin" }
+}
+```
+
+#### Get Leads
+```http
+GET /api/leads
+Authorization: Bearer <token>
+
+Response 200:
+{
+  "leads": [...],
+  "total": 42
+}
 ```
 
 ---
 
-## 🔧 Configuration
+## 🛡️ Security Features
 
-### Environment Variables (Backend)
+### Password Security
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | 3001 | Backend server port |
-| `NODE_ENV` | development | Environment mode |
-| `JWT_SECRET` | (generated) | Secret for signing tokens |
-| `JWT_EXPIRES_IN` | 24h | Token expiration time |
-| `RATE_LIMIT_MAX` | 100 | Max requests per window |
+- **Algorithm**: Argon2id (winner of Password Hashing Competition)
+- **Memory Cost**: 64MB
+- **Time Cost**: 3 iterations
+- **Parallelism**: 4 threads
 
-### Frontend Configuration
+### Rate Limiting
 
-The API URL is configured in `src/services/api.js`:
-```javascript
-const API_BASE_URL = 'http://localhost:3001/api';
+| Endpoint | Limit | Window |
+|----------|-------|--------|
+| General API | 100 requests | 15 minutes |
+| Login | 5 attempts | 15 minutes |
+
+### Security Headers (Production)
+
+```
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+Content-Security-Policy: default-src 'self'; script-src 'self' https://www.clarity.ms; ...
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
 ```
 
-For production, update this or use environment variables.
+### CORS
+
+Production only allows:
+- `https://securepent.com`
+- `https://www.securepent.com`
 
 ---
 
-## 📁 Project Structure
+## ⚙️ Configuration
+
+### File Structure
 
 ```
 securePage/
-├── 📄 README.md                 # This file
-├── 📄 SETUP_GUIDE.md           # Detailed setup instructions
-├── 📄 docker-compose.yml       # Docker orchestration
-├── 📄 Dockerfile               # Frontend container
-├── 📄 nginx.conf               # Nginx configuration
-├── 📄 package.json             # Frontend dependencies
-├── 📄 vite.config.js           # Vite configuration
-├── 📄 index.html               # Entry HTML with CSP
+├── docker-compose.yml          # Local development
+├── docker-compose.prod.yml     # Production deployment
+├── nginx.conf                  # Production Nginx (HTTPS)
+├── nginx.local.conf            # Local Nginx (HTTP)
+├── Dockerfile.frontend         # Frontend container
+├── deploy.sh                   # Production deployment script
+├── env.production.template     # Environment template
 │
-├── 📂 src/                     # Frontend source
-│   ├── 📄 App.jsx              # Main app component
-│   ├── 📄 main.jsx             # Entry point
-│   ├── 📄 index.css            # Global styles
-│   │
-│   ├── 📂 components/          # React components
-│   │   ├── Hero.jsx
-│   │   ├── Navigation.jsx
-│   │   ├── ContactSection.jsx
-│   │   ├── CookieConsent.jsx
-│   │   └── ... (12 more)
-│   │
-│   ├── 📂 pages/
-│   │   └── 📂 admin/           # Hidden admin dashboard
-│   │       ├── AdminPage.jsx
-│   │       ├── AdminLogin.jsx
-│   │       ├── AdminDashboard.jsx
-│   │       └── AdminStyles.css
-│   │
-│   ├── 📂 services/
-│   │   ├── api.js              # API client
-│   │   └── analytics.js        # Analytics tracker
-│   │
-│   └── 📂 utils/
-│       ├── security.js         # Client sanitization
-│       └── cookieConsent.js    # Cookie utilities
+├── src/                        # React Frontend
+│   ├── components/             # UI Components
+│   ├── pages/admin/            # Admin Dashboard
+│   ├── services/               # API & Analytics
+│   └── utils/                  # Security utilities
 │
-└── 📂 backend/                 # Backend source
-    ├── 📄 Dockerfile           # Backend container
-    ├── 📄 server.js            # Express server
-    ├── 📄 package.json         # Backend dependencies
-    │
-    ├── 📂 config/
-    │   └── database.js         # SQLite setup
-    │
-    ├── 📂 routes/
-    │   ├── admin.js            # Dashboard endpoints
-    │   ├── analytics.js        # Tracking endpoints
-    │   ├── auth.js             # Authentication
-    │   └── contact.js          # Contact form
-    │
-    ├── 📂 middleware/
-    │   ├── errorHandler.js
-    │   └── requestLogger.js
-    │
-    ├── 📂 utils/
-    │   └── sanitize.js         # Server sanitization
-    │
-    ├── 📂 scripts/
-    │   └── init-db.js          # Database initialization
-    │
-    └── 📂 data/
-        └── securepent.db       # SQLite database (auto-created)
+└── server/                     # Node.js Backend
+    ├── src/
+    │   ├── routes/             # API Routes
+    │   ├── db/                 # Database (Pool, Init)
+    │   ├── services/           # Business Logic
+    │   └── middleware/         # Express Middleware
+    ├── Dockerfile              # API Container
+    └── entrypoint.sh           # Startup script
 ```
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `docker-compose.prod.yml` | Production orchestration |
+| `nginx.conf` | HTTPS configuration with SSL |
+| `server/src/db/init.js` | Database schema & admin user |
+| `server/src/routes/auth.js` | Authentication logic |
+| `src/services/clarity.js` | Microsoft Clarity integration |
 
 ---
 
 ## 🔍 Troubleshooting
 
-### Backend won't start
+### Frontend Not Loading
 
 ```bash
-# Check if port is in use
-lsof -i :3001
+# Check container status
+docker ps
 
-# Reinstall dependencies (for native modules)
-cd backend
-rm -rf node_modules package-lock.json
-npm install
+# View frontend logs
+docker logs securepent_frontend
 ```
 
-### "Failed to fetch" error
-
-1. Verify backend is running: `curl http://localhost:3001/api/health`
-2. Check CSP in browser console
-3. Ensure CORS allows your origin
-
-### Login not working
+### API Errors (500)
 
 ```bash
-# Reset database
-cd backend
-rm -rf data
-npm run dev   # Recreates with default admin
+# View API logs
+docker compose -f docker-compose.prod.yml logs api --tail=100
 ```
 
-### Forgot Password (Locked Out)
+### Database Connection Issues
 
-If you have forgotten your admin password or locked yourself out, running this command will reset the password for user `admin` to `admin123`:
-
-**Docker:**
 ```bash
-docker exec -it securepent-backend node scripts/reset-admin.js
+# Check database
+docker logs securepent_db
+
+# Connect manually
+docker exec -it securepent_db psql -U securepent -d securepent_db
+
+# List users
+SELECT email, name, role FROM users;
 ```
 
-**Local Dev:**
+### Port Already In Use
+
 ```bash
-cd backend
-node scripts/reset-admin.js
+# Find process using port 80
+sudo lsof -i :80
+
+# Stop conflicting service
+sudo systemctl stop nginx  # or apache2
 ```
 
-### Docker issues
+### SSL Certificate Issues
 
 ```bash
-# Rebuild from scratch
-docker-compose down -v
-docker-compose up --build
+# Renew certificates
+docker compose -f docker-compose.prod.yml down
+sudo certbot renew
+docker compose -f docker-compose.prod.yml up -d
+```
+
+### Complete Reset
+
+```bash
+# WARNING: Deletes all data!
+docker compose -f docker-compose.prod.yml down -v
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
+---
+
+## 📊 Analytics (Microsoft Clarity)
+
+### Setup
+
+1. Create project at [clarity.microsoft.com](https://clarity.microsoft.com)
+2. Copy Project ID
+3. Add to `.env`:
+   ```
+   VITE_CLARITY_PROJECT_ID=your_project_id
+   ```
+4. Rebuild: `docker compose up --build -d`
+
+### GDPR Compliance
+
+- Clarity only activates when user accepts **Statistics** cookies
+- No tracking before consent
+- Users can change preferences anytime
+
+---
+
+## 🚀 Management Commands
+
+### Production
+
+```bash
+# View all logs
+docker compose -f docker-compose.prod.yml logs -f
+
+# Restart services
+docker compose -f docker-compose.prod.yml restart
+
+# Stop everything
+docker compose -f docker-compose.prod.yml down
+
+# Update and redeploy
+git pull origin main
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
+### Database
+
+```bash
+# Connect to database
+docker exec -it securepent_db psql -U securepent -d securepent_db
+
+# View leads
+SELECT * FROM leads ORDER BY submitted_at DESC LIMIT 10;
+
+# View users
+SELECT id, email, name, role FROM users;
 ```
 
 ---
@@ -557,20 +520,10 @@ MIT License - Use freely for your projects.
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run security audit: `npm audit`
-5. Submit a pull request
-
----
-
 <div align="center">
 
 **Built with 🔒 security-first mindset**
 
-[Report Bug](https://github.com/your-repo/issues) • [Request Feature](https://github.com/your-repo/issues)
+[🌐 Live Site](https://securepent.com) • [🐛 Report Bug](https://github.com/alsaifybashar/securePage/issues) • [💡 Request Feature](https://github.com/alsaifybashar/securePage/issues)
 
 </div>
