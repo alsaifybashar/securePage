@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.js';
 import leadsRoutes from './routes/leads.js';
 import cookiesRoutes from './routes/cookies.js';
 import healthRoutes from './routes/health.js';
+import adminRoutes from './routes/admin.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -110,6 +111,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/contact', leadsRoutes);  // Alias for frontend compatibility
 app.use('/api/cookies', cookiesRoutes);
+app.use('/api/admin', adminRoutes);    // Admin dashboard routes
 
 // Root endpoint
 app.get('/', (req, res) => {
