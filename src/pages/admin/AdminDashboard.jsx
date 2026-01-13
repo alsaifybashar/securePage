@@ -48,14 +48,15 @@ const AdminDashboard = ({ user, onLogout }) => {
                 getChartData('visitors', 30)
             ]);
 
+            // API returns data directly, not nested under .data
             if (statsResponse.success) {
-                setStats(statsResponse.data);
+                setStats(statsResponse.stats);
             }
             if (contactsResponse.success) {
-                setContacts(contactsResponse.data.contacts);
+                setContacts(contactsResponse.contacts || []);
             }
             if (chartResponse.success) {
-                setChartData(chartResponse.data.chartData);
+                setChartData(chartResponse.data || []);
             }
         } catch (error) {
             console.error('Failed to load dashboard:', error);
@@ -70,7 +71,7 @@ const AdminDashboard = ({ user, onLogout }) => {
             // Refresh contacts
             const response = await getContacts({ limit: 50 });
             if (response.success) {
-                setContacts(response.data.contacts);
+                setContacts(response.contacts || []);
             }
         } catch (error) {
             console.error('Failed to update status:', error);
