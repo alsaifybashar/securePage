@@ -82,15 +82,16 @@ const ContactSection = () => {
         }
 
         try {
-            // Sanitization
+            // Sanitize and map to server expected format
             const cleanData = {
-                firstName: sanitizeInput(formData.firstName),
-                lastName: sanitizeInput(formData.lastName),
+                name: sanitizeInput(`${formData.firstName} ${formData.lastName}`.trim()),
                 email: sanitizeInput(formData.email),
-                company: sanitizeInput(formData.company),
-                jobTitle: sanitizeInput(formData.jobTitle),
+                company: sanitizeInput(formData.company) || undefined,
                 message: sanitizeInput(formData.message),
-                privacyAgreed: formData.privacyAgreed
+                // Include job title in message if provided
+                ...(formData.jobTitle && {
+                    message: sanitizeInput(`[${formData.jobTitle}] ${formData.message}`)
+                })
             };
 
             await submitLead(cleanData);

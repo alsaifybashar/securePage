@@ -108,6 +108,7 @@ app.use(requestLogger);
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadsRoutes);
+app.use('/api/contact', leadsRoutes);  // Alias for frontend compatibility
 app.use('/api/cookies', cookiesRoutes);
 
 // Root endpoint
