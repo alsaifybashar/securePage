@@ -69,7 +69,11 @@ const AdminDashboard = ({ user, onLogout }) => {
                 });
             }
             if (contactsResponse.success) {
-                setContacts(contactsResponse.contacts || []);
+                // Defensive check to ensure contacts is an array
+                const contactsList = Array.isArray(contactsResponse.contacts)
+                    ? contactsResponse.contacts
+                    : [];
+                setContacts(contactsList);
             }
             if (chartResponse.success) {
                 setChartData(chartResponse.data || []);
