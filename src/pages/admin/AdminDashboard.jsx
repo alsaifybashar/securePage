@@ -48,9 +48,25 @@ const AdminDashboard = ({ user, onLogout }) => {
                 getChartData('visitors', 30)
             ]);
 
-            // API returns data directly, not nested under .data
+            // Map API response to UI expected structure
             if (statsResponse.success) {
-                setStats(statsResponse.stats);
+                const s = statsResponse.stats;
+                setStats({
+                    overview: {
+                        totalVisitors: s.totalVisitors || 0,
+                        visitorsToday: 0, // Not implemented in API yet
+                        totalPageViews: s.pageViews || 0,
+                        pageViewsToday: 0, // Not implemented in API yet
+                        avgSessionDuration: s.avgSessionDuration || 0,
+                        totalContacts: s.totalLeads || 0,
+                        newContacts: s.newLeads || 0,
+                        contactedLeads: s.contactedLeads || 0,
+                        convertedLeads: s.convertedLeads || 0,
+                        contactsThisWeek: s.leadsThisWeek || 0,
+                        contactsWeek: s.leadsThisWeek || 0,
+                        visitorsWeek: 0 // Not implemented in API yet
+                    }
+                });
             }
             if (contactsResponse.success) {
                 setContacts(contactsResponse.contacts || []);
