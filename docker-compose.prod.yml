@@ -68,7 +68,7 @@ services:
         - VITE_CLARITY_PROJECT_ID=${VITE_CLARITY_PROJECT_ID:-}
     container_name: securepent_frontend
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
