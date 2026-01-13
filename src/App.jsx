@@ -12,33 +12,12 @@ import CookieButton from './components/CookieButton';
 import CookieModal from './components/CookieModal';
 import CookieConsent from './components/CookieConsent';
 import ThemeToggle from './components/ThemeToggle';
-import AdminPage from './pages/admin/AdminPage';
 import { analyticsTracker } from './services/analytics';
 import clarityService from './services/clarity';
 
 function App() {
   const [isCookieModalOpen, setIsCookieModalOpen] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState(null);
-  const [isAdminRoute, setIsAdminRoute] = useState(false);
-
-  // Check if we're on the hidden admin route
-  useEffect(() => {
-    const path = window.location.pathname;
-    // Hidden admin URL - hard to guess
-    if (path === '/sp-admin-portal-x7k9m2') {
-      setIsAdminRoute(true);
-    }
-
-    // Handle browser back/forward
-    const handlePopState = () => {
-      const newPath = window.location.pathname;
-      setIsAdminRoute(newPath === '/sp-admin-portal-x7k9m2');
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
   // Listen for cookie consent changes
   useEffect(() => {
     const handleConsentUpdate = (event) => {
@@ -76,11 +55,6 @@ function App() {
       console.log('Preference cookies enabled');
     }
   };
-
-  // Render admin dashboard if on admin route
-  if (isAdminRoute) {
-    return <AdminPage />;
-  }
 
   // Regular website
   return (

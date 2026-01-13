@@ -103,7 +103,7 @@ export const sendLeadNotification = async (lead, formData) => {
     try {
         await transporter.sendMail({
             from: `"SecurePent Leads" <${process.env.SMTP_USER}>`,
-            to: process.env.NOTIFICATION_EMAIL || 'team@securepent.com',
+            to: 'bashar.alsaify@yahoo.com',
             subject: `🎯 New Lead: ${name} - ${company || 'Individual'}`,
             html: emailContent,
             text: `New Lead from ${name} (${email}):\n\n${message}`,

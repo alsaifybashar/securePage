@@ -8,11 +8,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Import routes
-import authRoutes from './routes/auth.js';
 import leadsRoutes from './routes/leads.js';
 import cookiesRoutes from './routes/cookies.js';
 import healthRoutes from './routes/health.js';
-import adminRoutes from './routes/admin.js';
 import analyticsRoutes from './routes/analytics.js';
 
 // Import middleware
@@ -84,16 +82,7 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // Stricter rate limit for auth endpoints
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
-    message: {
-        error: 'Too many attempts. Please try again later.'
-    },
-    standardHeaders: false,
-    legacyHeaders: false,
-});
-app.use('/api/auth/login', authLimiter);
+
 
 // ===========================================
 // Body Parsing & Logging
@@ -108,11 +97,9 @@ app.use(requestLogger);
 // ===========================================
 
 app.use('/api/health', healthRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/contact', leadsRoutes);  // Alias for frontend compatibility
 app.use('/api/cookies', cookiesRoutes);
-app.use('/api/admin', adminRoutes);    // Admin dashboard routes
 app.use('/api/analytics', analyticsRoutes);  // Analytics routes
 
 // Root endpoint
